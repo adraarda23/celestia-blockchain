@@ -6,7 +6,7 @@ import os
 import json
 import base64
 from datetime import datetime
-from database import save_game_record, get_game_record, get_last_game_id
+from database import save_game_record, get_game_record, get_last_game_id,get_player_matches
 
 
 app = Flask(__name__)
@@ -308,7 +308,8 @@ def fetch_blob_game_data(block_height, namespace):
         print(f"Blob decode hatası: {e}")
         return None
 
-@app.route('/get_game/<int:game_id>', methods=['GET'])
+@app.route('/get_game_record/<int:game_id>', methods=['GET'])
+@jwt_required()
 def get_game(game_id):
     record = get_game_record(game_id)
     if not record:
@@ -318,6 +319,25 @@ def get_game(game_id):
     if game_data:
         return jsonify(game_data), 200
     return jsonify({"error": "Blob verisi alınamadı", "record": record}), 500
+
+@app.route('/get_player_history', methods=['GET'])
+@jwt_required()
+def get_player_history():
+    current_user = get_jwt_identity()
+    try:
+        matches = get_player_matches(current_user)
+        history = [{
+            "game_id": match[0],
+            "player1": match[1],
+            "player2": match[2],
+            "block_height": match[3],
+            "namespace": match[4],
+            "is_player1": match[1] == current_user
+        } for match in matches]
+        
+        return jsonify({"matches": history}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 

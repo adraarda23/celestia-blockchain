@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  python-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./app.py:/app/app.py
+    restart: unless-stopped
+
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./server.js:/app/server.js
+    restart: unless-stopped
