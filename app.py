@@ -342,5 +342,5 @@ def get_player_history():
 
 
 if __name__ == '__main__':
-    #deliver_prize("celestia13jncmr6fujd7l6m67y874p4kqpmfxa7ugys5vc")
+    deliver_prize("celestia13jncmr6fujd7l6m67y874p4kqpmfxa7ugys5vc")
     app.run(debug=True,port=5001)

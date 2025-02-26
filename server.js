@@ -2,11 +2,13 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const { Buffer } = require('buffer');
 const Cosmos = require('@keplr-wallet/cosmos');
+require("dotenv").config();
 
 const app = express();
 app.use(express.json());
 
-const SECRET_KEY = "super_secret_key";
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
+
 
 // 🌟 1️⃣ Kimlik Doğrulama ve JWT Token Üretme
 app.post('/auth', (req, res) => {
